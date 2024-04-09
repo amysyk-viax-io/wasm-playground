@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of proprietary application.
+  ~
+  ~ The application is paid proprietary software, so you must ensure that you are
+  ~ authorized to use it.
+  ~
+  ~ You may not modify, reverse-engineer, decompile, or disassemble the application
+  ~ in whole or in part, or create any derivative works from application,
+  ~ or sublicense any rights in the application, unless otherwise expressly authorized
+  ~ in writing.
+  ~
+  ~ The application is protected by copyright and other intellectual property laws and
+  ~ treaties.
+  -->
+
+<configuration>
+
+    <property name="LOG_DIR" value="./logs"/>
+
+    <!-- Setup basic console appender for terminal STDOUT/STDERR -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %highlight(%-5p)|%date{"HH:mm:ss.SSSXXX",UTC}|%green(%-17thread)|%m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- LOG everything at INFO level -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+    ​
+</configuration>
