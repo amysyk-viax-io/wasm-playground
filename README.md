@@ -1,5 +1,9 @@
 # wasm playground
 
+## Compatibility
+
+Java: 21
+
 ## Preparation
 
 ### Extism runtime installation
