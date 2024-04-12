@@ -23,7 +23,7 @@ public class ExtismConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(ExtismConfiguration.class);
 
-    private final ExtismProperties properties;
+    private final ExtismPluginProperties pluginProperties;
 
     @Bean
     public WasmSourceResolver wasmSourceResolver() {
@@ -32,13 +32,13 @@ public class ExtismConfiguration {
 
     @Bean
     public WasmSource wasmSource() {
-        return this.wasmSourceResolver().resolve(Path.of(this.properties.getPluginPath()));
+        return this.wasmSourceResolver().resolve(Path.of(this.pluginProperties.getPath()));
     }
 
     @Bean
     public Manifest manifest() {
         final List<WasmSource> sources = List.of(this.wasmSource());
-        return new Manifest(sources, null, null, this.properties.getAllowedHosts());
+        return new Manifest(sources, null, null, this.pluginProperties.getAllowedHosts());
     }
 
     @Bean

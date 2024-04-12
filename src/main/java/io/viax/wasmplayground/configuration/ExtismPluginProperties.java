@@ -11,8 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("extism")
-public class ExtismProperties {
-    private String pluginPath;
+@ConfigurationProperties("extism.plugin")
+public class ExtismPluginProperties {
+    private String path;
+    private String strategy = "default";
     private List<String> allowedHosts = new ArrayList<>();
 }

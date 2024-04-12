@@ -5,7 +5,8 @@ spring:
     active: rust
 
 extism:
-  allowed-hosts: localhost
+  plugin:
+    allowed-hosts: localhost
 
 ---
 
@@ -15,7 +16,8 @@ spring:
       on-profile: js
 
 extism:
-  plugin-path: ./extism/simple-js/plugin.wasm
+  plugin:
+    path: ./extism/simple-js/plugin.wasm
 
 ---
 
@@ -25,4 +27,5 @@ spring:
       on-profile: rust
 
 extism:
-  plugin-path: ./extism/simple-rust/plugin.wasm
+  plugin:
+    path: ./extism/simple-rust/plugin.wasm

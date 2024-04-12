@@ -6,7 +6,7 @@ import org.extism.sdk.HostUserData;
 import org.extism.sdk.LibExtism;
 import org.extism.sdk.Plugin;
 import org.extism.sdk.manifest.Manifest;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,8 +14,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//@Primary
 @Service
+@ConditionalOnProperty(name = "extism.plugin.strategy", havingValue = "concurrent")
 public class ConcurrentExtismPluginService implements ExtismPluginService {
     private final ExtismFunction<HostUserData> simpleKvStoreReadFn;
     private final ExtismFunction<HostUserData> simpleKvStoreWriteFn;

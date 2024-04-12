@@ -7,13 +7,13 @@ import org.extism.sdk.HostUserData;
 import org.extism.sdk.LibExtism;
 import org.extism.sdk.Plugin;
 import org.extism.sdk.manifest.Manifest;
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Primary
 @Service
+@ConditionalOnProperty(name = "extism.plugin.strategy", havingValue = "default", matchIfMissing = true)
 @RequiredArgsConstructor
 public class DefaultExtismPluginService implements ExtismPluginService {
     private final Manifest manifest;
