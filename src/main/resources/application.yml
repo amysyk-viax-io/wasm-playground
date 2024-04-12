@@ -1,3 +1,28 @@
 spring:
   application:
     name: wasm-playground
+  profiles:
+    active: rust
+
+extism:
+  allowed-hosts: localhost
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: js
+
+extism:
+  plugin-path: ./extism/simple-js/plugin.wasm
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: rust
+
+extism:
+  plugin-path: ./extism/simple-rust/plugin.wasm

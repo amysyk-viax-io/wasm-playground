@@ -1,5 +1,6 @@
 package io.viax.wasmplayground.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.extism.sdk.ExtismFunction;
 import org.extism.sdk.HostUserData;
 import org.extism.sdk.manifest.Manifest;
@@ -17,9 +18,12 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
+@RequiredArgsConstructor
 public class ExtismConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(ExtismConfiguration.class);
+
+    private final ExtismProperties properties;
 
     @Bean
     public WasmSourceResolver wasmSourceResolver() {
@@ -28,13 +32,13 @@ public class ExtismConfiguration {
 
     @Bean
     public WasmSource wasmSource() {
-        return this.wasmSourceResolver().resolve(Path.of("./extism/simple-js/plugin.wasm"));
+        return this.wasmSourceResolver().resolve(Path.of(this.properties.getPluginPath()));
     }
 
     @Bean
     public Manifest manifest() {
         final List<WasmSource> sources = List.of(this.wasmSource());
-        return new Manifest(sources, null, null, List.of("localhost"));
+        return new Manifest(sources, null, null, this.properties.getAllowedHosts());
     }
 
     @Bean

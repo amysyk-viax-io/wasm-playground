@@ -21,7 +21,7 @@ function simpleHttpPost() {
     const input = Host.inputString()
     const request = {
         method: "POST",
-        url: "http://localhost:8080/extism/some-processing",
+        url: "http://localhost:8080/simple/some-processing",
         headers: {
             "Content-Type": "application/json"
         }
