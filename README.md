@@ -17,5 +17,5 @@ https://grafana.com/docs/k6/latest/set-up/install-k6/
 ## Build and run
 
 ```bash
-./gradlew clean bootRun
+EXTISM_CACHE_CONFIG=./wasmtime-config.toml ./gradlew bootRun
 ```
