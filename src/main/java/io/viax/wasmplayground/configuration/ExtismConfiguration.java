@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.extism.sdk.ExtismFunction;
 import org.extism.sdk.HostUserData;
 import org.extism.sdk.manifest.Manifest;
+import org.extism.sdk.manifest.MemoryOptions;
 import org.extism.sdk.wasm.WasmSource;
 import org.extism.sdk.wasm.WasmSourceResolver;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,6 +24,7 @@ public class ExtismConfiguration {
     private static final Logger log = LoggerFactory.getLogger(ExtismConfiguration.class);
 
     private final ExtismPluginProperties pluginProperties;
+    private final Map<String, String> kvStore;
 
     @Bean
     public WasmSourceResolver wasmSourceResolver() {
@@ -36,14 +37,14 @@ public class ExtismConfiguration {
     }
 
     @Bean
-    public Manifest manifest() {
-        final List<WasmSource> sources = List.of(this.wasmSource());
-        return new Manifest(sources, null, null, this.pluginProperties.getAllowedHosts());
+    public MemoryOptions memoryOptions() {
+        return new MemoryOptions(32);
     }
 
     @Bean
-    public Map<String, String> simpleKvStore() {
-        return new ConcurrentHashMap<>();
+    public Manifest manifest() {
+        final List<WasmSource> sources = List.of(this.wasmSource());
+        return new Manifest(sources, this.memoryOptions(), null, this.pluginProperties.getAllowedHosts());
     }
 
     @Bean
@@ -54,7 +55,7 @@ public class ExtismConfiguration {
 
             log.debug("simpleKvStoreWriteFn key[{}], value[{}]", key, value);
 
-            this.simpleKvStore().put(key, value);
+            this.kvStore.put(key, value);
             plugin.returnString(returns[0], key);
         };
     }
@@ -63,7 +64,7 @@ public class ExtismConfiguration {
     public ExtismFunction<HostUserData> simpleKvStoreReadFn() {
         return (plugin, params, returns, data) -> {
             final var key = plugin.inputString(params[0]);
-            final var value = this.simpleKvStore().get(key);
+            final var value = this.kvStore.get(key);
 
             log.debug("simpleKvStoreReadFn key[{}], value[{}]", key, value);
 

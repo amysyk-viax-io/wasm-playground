@@ -4,3 +4,8 @@
 
 [cache]
 enabled = true
+worker-event-queue-size="16"
+baseline-compression-level=3
+optimized-compression-level=20
+optimized-compression-usage-counter-threshold="256"
+allowed-clock-drift-for-files-from-future="1d"

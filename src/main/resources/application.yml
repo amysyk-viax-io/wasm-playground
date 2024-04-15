@@ -2,7 +2,7 @@ spring:
   application:
     name: wasm-playground
   profiles:
-    active: rust
+    active: js
 
 extism:
   plugin:
