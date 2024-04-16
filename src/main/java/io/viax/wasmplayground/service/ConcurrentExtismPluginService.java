@@ -2,7 +2,6 @@ package io.viax.wasmplayground.service;
 
 import org.extism.sdk.HostFunction;
 import org.extism.sdk.Plugin;
-import org.extism.sdk.manifest.Manifest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class ConcurrentExtismPluginService implements ExtismPluginService {
     private final ThreadLocal<Plugin> plugin;
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
-    public ConcurrentExtismPluginService(final Manifest manifest, final Supplier<HostFunction<?>[]> hostFunctionsSupplier) {
+    public ConcurrentExtismPluginService(final byte[] manifest, final Supplier<HostFunction<?>[]> hostFunctionsSupplier) {
         this.plugin = ThreadLocal.withInitial(() -> new Plugin(manifest, true, hostFunctionsSupplier.get()));
     }
 

@@ -9,6 +9,10 @@ extism:
     allowed-hosts: localhost
     execution-strategy: default
 
+logging:
+  level:
+    io.viax: info
+
 ---
 
 spring:

@@ -7,6 +7,7 @@ import org.extism.sdk.HostUserData;
 import org.extism.sdk.LibExtism;
 import org.extism.sdk.manifest.Manifest;
 import org.extism.sdk.manifest.MemoryOptions;
+import org.extism.sdk.support.JsonSerde;
 import org.extism.sdk.wasm.WasmSource;
 import org.extism.sdk.wasm.WasmSourceResolver;
 import org.slf4j.Logger;
@@ -14,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +40,8 @@ public class ExtismConfiguration {
     }
 
     @Bean
-    public WasmSource wasmSource() {
-        return this.wasmSourceResolver().resolve(Path.of(this.pluginProperties.getPath()));
+    public WasmSource wasmSource() throws IOException {
+        return this.wasmSourceResolver().resolve("main", Files.readAllBytes(Path.of(this.pluginProperties.getPath())));
     }
 
     @Bean
@@ -46,9 +50,11 @@ public class ExtismConfiguration {
     }
 
     @Bean
-    public Manifest manifest() {
+    public byte[] manifest() throws IOException {
         final List<WasmSource> sources = List.of(this.wasmSource());
-        return new Manifest(sources, this.memoryOptions(), null, this.pluginProperties.getAllowedHosts());
+        final var manifest = new Manifest(sources, this.memoryOptions(), null, this.pluginProperties.getAllowedHosts());
+
+        return JsonSerde.toJson(manifest).getBytes(StandardCharsets.UTF_8);
     }
 
     @Bean
