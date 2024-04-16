@@ -2,7 +2,9 @@ package io.viax.wasmplayground.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.extism.sdk.ExtismFunction;
+import org.extism.sdk.HostFunction;
 import org.extism.sdk.HostUserData;
+import org.extism.sdk.LibExtism;
 import org.extism.sdk.manifest.Manifest;
 import org.extism.sdk.manifest.MemoryOptions;
 import org.extism.sdk.wasm.WasmSource;
@@ -16,6 +18,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Configuration
 @RequiredArgsConstructor
@@ -48,12 +52,12 @@ public class ExtismConfiguration {
     }
 
     @Bean
-    public ExtismFunction<HostUserData> simpleKvStoreWriteFn() {
+    public ExtismFunction<HostUserData> kvWriteFn() {
         return (plugin, params, returns, data) -> {
             final var key = plugin.inputString(params[0]);
             final var value = plugin.inputString(params[1]);
 
-            log.debug("simpleKvStoreWriteFn key[{}], value[{}]", key, value);
+            log.debug("kvWriteFn key[{}], value[{}]", key, value);
 
             this.kvStore.put(key, value);
             plugin.returnString(returns[0], key);
@@ -61,14 +65,34 @@ public class ExtismConfiguration {
     }
 
     @Bean
-    public ExtismFunction<HostUserData> simpleKvStoreReadFn() {
+    public ExtismFunction<HostUserData> kvReadFn() {
         return (plugin, params, returns, data) -> {
             final var key = plugin.inputString(params[0]);
             final var value = this.kvStore.get(key);
 
-            log.debug("simpleKvStoreReadFn key[{}], value[{}]", key, value);
+            log.debug("kvReadFn key[{}], value[{}]", key, value);
 
             plugin.returnString(returns[0], Objects.requireNonNullElse(value, ""));
+        };
+    }
+
+    @Bean
+    public Supplier<HostFunction<?>[]> hostFunctionsSupplier() {
+        return () -> new HostFunction[]{
+                new HostFunction<>(
+                        "kv_read",
+                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
+                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
+                        this.kvReadFn(),
+                        Optional.empty()
+                ),
+                new HostFunction<>(
+                        "kv_write",
+                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64, LibExtism.ExtismValType.I64},
+                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
+                        this.kvWriteFn(),
+                        Optional.empty()
+                )
         };
     }
 }

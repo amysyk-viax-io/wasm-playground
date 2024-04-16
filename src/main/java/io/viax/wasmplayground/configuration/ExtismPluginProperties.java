@@ -14,6 +14,10 @@ import java.util.List;
 @ConfigurationProperties("extism.plugin")
 public class ExtismPluginProperties {
     private String path;
-    private String strategy = "default";
+    private ExecutionStrategy executionStrategy = ExecutionStrategy.DEFAULT;
     private List<String> allowedHosts = new ArrayList<>();
+
+    private enum ExecutionStrategy {
+        DEFAULT, CONCURRENT
+    }
 }

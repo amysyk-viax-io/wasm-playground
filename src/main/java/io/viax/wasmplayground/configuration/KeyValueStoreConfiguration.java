@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
-public class SimpleConfiguration {
+public class KeyValueStoreConfiguration {
 
     @Bean
     public Map<String, String> kvStore() {

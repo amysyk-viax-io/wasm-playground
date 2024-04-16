@@ -1,48 +1,25 @@
 package io.viax.wasmplayground.service;
 
 import lombok.RequiredArgsConstructor;
-import org.extism.sdk.ExtismFunction;
 import org.extism.sdk.HostFunction;
-import org.extism.sdk.HostUserData;
-import org.extism.sdk.LibExtism;
 import org.extism.sdk.Plugin;
 import org.extism.sdk.manifest.Manifest;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
-@ConditionalOnProperty(name = "extism.plugin.strategy", havingValue = "default", matchIfMissing = true)
+@ConditionalOnProperty(name = "extism.plugin.execution-strategy", havingValue = "default", matchIfMissing = true)
 @RequiredArgsConstructor
 public class DefaultExtismPluginService implements ExtismPluginService {
     private final Manifest manifest;
-    private final ExtismFunction<HostUserData> simpleKvStoreReadFn;
-    private final ExtismFunction<HostUserData> simpleKvStoreWriteFn;
+    private final Supplier<HostFunction<?>[]> hostFunctionsSupplier;
 
     @Override
     public String call(final String fn, final String input) {
-        try (final var plugin = new Plugin(this.manifest, true, this.getHostFunctions())) {
+        try (final var plugin = new Plugin(this.manifest, true, this.hostFunctionsSupplier.get())) {
             return plugin.call(fn, input);
         }
-    }
-
-    private HostFunction<?>[] getHostFunctions() {
-        return new HostFunction[]{
-                new HostFunction<>(
-                        "kv_read",
-                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
-                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
-                        this.simpleKvStoreReadFn,
-                        Optional.empty()
-                ),
-                new HostFunction<>(
-                        "kv_write",
-                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64, LibExtism.ExtismValType.I64},
-                        new LibExtism.ExtismValType[]{LibExtism.ExtismValType.I64},
-                        this.simpleKvStoreWriteFn,
-                        Optional.empty()
-                )
-        };
     }
 }
