@@ -8,21 +8,22 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Service
-@ConditionalOnProperty(name = "extism.plugin.execution-strategy", havingValue = "concurrent")
-public class ConcurrentExtismPluginService implements ExtismPluginService {
+@ConditionalOnProperty(name = "extism.plugin.execution-strategy", havingValue = "fixed")
+public class FixedExtismPluginService implements ExtismPluginService {
     private final ThreadLocal<Plugin> plugin;
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
-    public ConcurrentExtismPluginService(final byte[] manifest, final Supplier<HostFunction<?>[]> hostFunctionsSupplier) {
+    public FixedExtismPluginService(final byte[] manifest, final Supplier<HostFunction<?>[]> hostFunctionsSupplier) {
         this.plugin = ThreadLocal.withInitial(() -> new Plugin(manifest, true, hostFunctionsSupplier.get()));
     }
 
     @Override
-    public String call(final String fn, final String input) {
-        final var future = this.executor.submit(() -> this.plugin.get().call(fn, input));
+    public String invoke(final Function<Plugin, String> fn) {
+        final var future = this.executor.submit(() -> fn.apply(this.plugin.get()));
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {

@@ -18,6 +18,6 @@ public class ExtismPluginProperties {
     private List<String> allowedHosts = new ArrayList<>();
 
     private enum ExecutionStrategy {
-        DEFAULT, CONCURRENT
+        DEFAULT, FIXED
     }
 }

@@ -1,6 +1,10 @@
 package io.viax.wasmplayground.service;
 
+import org.extism.sdk.Plugin;
+
+import java.util.function.Function;
+
 public interface ExtismPluginService {
 
-    String call(String fn, String input);
+    String invoke(Function<Plugin, String> fn);
 }

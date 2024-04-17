@@ -7,7 +7,7 @@ export const options = {
     scenarios: {
         wasm: {
             executor: 'shared-iterations',
-            vus: 100,
+            vus: 50,
             iterations: 1000,
             maxDuration: '300s',
         },

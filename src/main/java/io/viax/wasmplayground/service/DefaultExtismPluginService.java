@@ -7,6 +7,7 @@ import org.extism.sdk.Plugin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -18,15 +19,9 @@ public class DefaultExtismPluginService implements ExtismPluginService {
     private final Supplier<HostFunction<?>[]> hostFunctionsSupplier;
 
     @Override
-    public String call(final String fn, final String input) {
+    public String invoke(final Function<Plugin, String> fn) {
         try (final var plugin = new Plugin(this.manifest, true, this.hostFunctionsSupplier.get())) {
-            final var startTime = System.nanoTime();
-            final var result = plugin.call(fn, input);
-            final var endTime = System.nanoTime();
-
-            log.debug("call fn[{}], input[{}], time[{}ms]", fn, input, ((endTime - startTime) / 1000000D));
-
-            return result;
+            return fn.apply(plugin);
         }
     }
 }
