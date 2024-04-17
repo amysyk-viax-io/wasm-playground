@@ -26,19 +26,8 @@ public class ExtismController {
     @PostMapping("/extism/kv-store")
     public String kvStore(@RequestBody final SimpleModel model) {
         return this.extismPluginService.invoke(plugin -> {
-            final var writeStartTime = System.nanoTime();
             plugin.call(KV_WRITE_FN, model.getId());
-            final var writeEndTime = System.nanoTime();
-
-            log.debug("call fn[{}], input[{}], time[{}ms]", KV_WRITE_FN, model.getId(), ((writeEndTime - writeStartTime) / 1000000D));
-
-            final var readStartTime = System.nanoTime();
-            final var result = plugin.call(KV_READ_FN, model.getId());
-            final var readEndTime = System.nanoTime();
-
-            log.debug("call fn[{}], input[{}], time[{}ms]", KV_READ_FN, model.getId(), ((readEndTime - readStartTime) / 1000000D));
-
-            return result;
+            return plugin.call(KV_READ_FN, model.getId());
         });
     }
 }

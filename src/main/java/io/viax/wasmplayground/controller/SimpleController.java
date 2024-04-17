@@ -16,7 +16,7 @@ public class SimpleController {
     @PostMapping("/simple/some-processing")
     public String someProcessing(@RequestBody final SimpleModel model, @RequestHeader final Map<String, String> headers) throws InterruptedException {
         log.debug("processing body[{}], headers[{}]", model, headers);
-        Thread.sleep(100);
+//        Thread.sleep(100);
         return "processing for " + model.getId();
     }
 }
