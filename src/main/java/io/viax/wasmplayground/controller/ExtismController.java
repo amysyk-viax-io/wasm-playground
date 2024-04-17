@@ -30,13 +30,13 @@ public class ExtismController {
             plugin.call(KV_WRITE_FN, model.getId());
             final var writeEndTime = System.nanoTime();
 
-            log.debug("call fn[{}], input[{}], time[{}ms]", KV_WRITE_FN, model.getId(), ((writeStartTime - writeEndTime) / 1000000D));
+            log.debug("call fn[{}], input[{}], time[{}ms]", KV_WRITE_FN, model.getId(), ((writeEndTime - writeStartTime) / 1000000D));
 
             final var readStartTime = System.nanoTime();
             final var result = plugin.call(KV_READ_FN, model.getId());
             final var readEndTime = System.nanoTime();
 
-            log.debug("call fn[{}], input[{}], time[{}ms]", KV_READ_FN, model.getId(), ((readStartTime - readEndTime) / 1000000D));
+            log.debug("call fn[{}], input[{}], time[{}ms]", KV_READ_FN, model.getId(), ((readEndTime - readStartTime) / 1000000D));
 
             return result;
         });
