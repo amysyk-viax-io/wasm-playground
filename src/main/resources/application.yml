@@ -11,7 +11,7 @@ extism:
 
 logging:
   level:
-    io.viax: info
+    io.viax: debug
 
 ---
 

@@ -1,5 +1,8 @@
 ```bash
 cargo build --target wasm32-wasi --release
+```
+
+```bash
 wasm-opt -O3 -o plugin.wasm target/wasm32-wasi/release/plugin.wasm
 ```
 
