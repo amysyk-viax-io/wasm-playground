@@ -38,3 +38,4 @@ out/
 
 wasmtime-cache
 target
+node_modules
