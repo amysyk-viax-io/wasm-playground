@@ -2,7 +2,7 @@ spring:
   application:
     name: wasm-playground
   profiles:
-    active: rust
+    active: go
 
 extism:
   plugin:
@@ -34,3 +34,14 @@ spring:
 extism:
   plugin:
     path: ./extism/simple-rust/plugin.wasm
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: go
+
+extism:
+  plugin:
+    path: ./extism/simple-go/plugin.wasm
