@@ -46,7 +46,7 @@ public class ExtismConfiguration {
 
     @Bean
     public MemoryOptions memoryOptions() {
-        return new MemoryOptions(32);
+        return new MemoryOptions(32, 5 * 1024);
     }
 
     @Bean
